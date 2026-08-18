@@ -147,12 +147,29 @@
       var btn = form.querySelector("button[type=submit]");
       var original = btn.textContent;
       btn.disabled = true;
-      btn.textContent = "Sending\u2026";
+      btn.textContent = "Opening your email\u2026";
 
       setTimeout(function () {
+        var data = Object.fromEntries(new FormData(form).entries());
+        var subject = encodeURIComponent(
+          "Enquiry from " + (data.name || "website")
+        );
+        var body = encodeURIComponent(
+          "Name: " + (data.name || "") + "\n" +
+          "Business: " + (data.business || "") + "\n" +
+          "Email: " + (data.email || "") + "\n" +
+          "Phone: " + (data.phone || "") + "\n" +
+          "Entity type: " + (data.entity || "") + "\n" +
+          "Service needed: " + (data.service || "") + "\n" +
+          "Timeline: " + (data.deadline || "") + "\n\n" +
+          "Requirement:\n" + (data.message || "")
+        );
+        window.location.href =
+          "mailto:casanjeebrajpathak1993@gmail.com?subject=" + subject + "&body=" + body;
+
         status.className = "form-status ok";
         status.textContent =
-          "Enquiry recorded. A named person will confirm receipt within one business day.";
+          "Your email app has opened with the enquiry pre-filled. A named person will confirm receipt within one business day.";
         form.reset();
         btn.disabled = false;
         btn.textContent = original;
